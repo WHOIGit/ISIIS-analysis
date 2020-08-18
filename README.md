@@ -1,2 +1,2 @@
 # ISIIS-analysis
-Stingray-ISIIS image analysis, metadata, and ocean data analysis (NES-LTER and OTZ)
+Stingray-ISIIS image analysis, metadata management, and ocean data analysis (NES-LTER and OTZ)
