@@ -37,7 +37,10 @@ g = 2.2;
 a = uint8(NaN(1750,2330,w*2+1));
 %pid_stack = cell(w*2+1,1);
 %pid_stack{end} = [p b '_' num2str(c+count) '.tiff'];
+%new basler software?
 pid_stack = regexprep(cellstr(strcat(p, b, '_', num2str((c-w:c+w)'), '.tiff')), ' ', '');
+%old basler software?
+pid_stack = regexprep(cellstr(strcat(p, b, '_', num2str((c-w:c+w)','%04.0f'), '.tiff')), ' ', '');
 for counts = 1:w*2+1, disp(c-w-1+counts), a(:,:,counts) = imread([pid_stack{counts}]); end
 %for count = c-w:c+w, disp(count-c+w+1), pid_stack{count-c+w+1} = [p b '_' num2str(count) '.tiff']; a(:,:,count-c+w+1) = imread(pid{count-c+w+1}); end
 %disp([p b '_' num2str(count) '.tiff'])
@@ -45,7 +48,7 @@ disp(pid_stack(end))
 %%
 lastonesofar = 0;
 %c = 51;
-for setnum = 1:1 %ceil(cmax/setsize)
+for setnum = 1:ceil(cmax/setsize)
     %for count = c:cmax-w-1  %36169
     r = cell(setsize,1);
     pid = r;
@@ -108,11 +111,13 @@ for setnum = 1:1 %ceil(cmax/setsize)
                     [~,fout] = fileparts(pid_stack{w+1});
                     fout = [fout '_' num2str(floor(bb(1))) '_' num2str(floor(bb(2)))];
                     %r{count}(ind(ii)).pid = fout;
-                    gstat = [numel(find(img==255)) numel(img) prctile(double(img(:)),5) PM]; %add avg gray for whole image
+                    gstat = [numel(find(img==255)) numel(img) prctile(double(img(:)),5) mean(PM(:))]; %add avg gray for whole image
                     %r{count}(ind(ii)).gstat = gstat;
                     if 1 %write images
-                        if gstat(:,1)./gstat(:,2) > .03 & gstat(:,3)>150
-                            %imwrite(uint8(img), [outdir '\artifact\' fout '.png'])
+                        %if gstat(:,1)./gstat(:,2) > .03 & gstat(:,3)>150
+                        %    %imwrite(uint8(img), [outdir '\artifact\' fout '.png'])
+                        if mean(PM) < 150
+                            imwrite(uint8(img), [outdir '\turbid\' fout '.png'])
                         else
                             imwrite(uint8(img), [outdir fout '.png'])
                         end
@@ -168,7 +173,8 @@ for setnum = 1:1 %ceil(cmax/setsize)
             pid_stack(1:end-1) = pid_stack(2:end);
             %pid_stack{end} = [p b '_' num2str(count+w+1) '.tiff'];
             lastonesofar = c+count+w+setsize*(setnum-1);
-            pid_stack{end} = [p b '_' num2str(lastonesofar) '.tiff'];
+            %pid_stack{end} = [p b '_' num2str(lastonesofar) '.tiff'];     
+            pid_stack{end} = [p b '_' num2str(lastonesofar,'%04.0f') '.tiff'];
             disp(['new image end of stack: ' pid_stack{end}])
             try
                 a(:,:,end) = imread(pid_stack{end});
