@@ -2,10 +2,15 @@
 %b = 'Basler_avA2300-25gm__22955661__20200202_183926409';
 %outdir = '\\sosiknas1\Stingray_data\EN649\ROIs\EN649_02Feb2020_028\';
 
-    tdir = 'NESLTER_EN644_21Aug2019_001';
-    outdir = ['\\sosiknas1\Stingray_data\EN644_ROI\' tdir '\'];
-    p = ['\\sosiknas1\Stingray_data\EN644\' tdir '\'];
+    %tdir = 'NESLTER_EN644_21Aug2019_001';
+    %outdir = ['\\sosiknas1\Stingray_data\EN644_ROI\' tdir '\'];
+    %p = ['\\sosiknas1\Stingray_data\EN644\' tdir '\'];
     
+    tdir = 'EN657_14Oct2020_002';
+    p = ['E:\NESLTER_EN657\' tdir  '\'];
+    outdir = ['d:\NESLTER_EN657_ROI\' tdir '\'];
+    
+
 if ~exist(outdir, 'dir')
     mkdir(outdir)
     mkdir([outdir filesep 'turbid'])
@@ -40,7 +45,7 @@ a = uint8(NaN(1750,2330,w*2+1));
 %new basler software?
 pid_stack = regexprep(cellstr(strcat(p, b, '_', num2str((c-w:c+w)'), '.tiff')), ' ', '');
 %old basler software?
-pid_stack = regexprep(cellstr(strcat(p, b, '_', num2str((c-w:c+w)','%04.0f'), '.tiff')), ' ', '');
+%pid_stack = regexprep(cellstr(strcat(p, b, '_', num2str((c-w:c+w)','%04.0f'), '.tiff')), ' ', '');
 for counts = 1:w*2+1, disp(c-w-1+counts), a(:,:,counts) = imread([pid_stack{counts}]); end
 %for count = c-w:c+w, disp(count-c+w+1), pid_stack{count-c+w+1} = [p b '_' num2str(count) '.tiff']; a(:,:,count-c+w+1) = imread(pid{count-c+w+1}); end
 %disp([p b '_' num2str(count) '.tiff'])
@@ -52,8 +57,8 @@ for setnum = 1:ceil(cmax/setsize)
     %for count = c:cmax-w-1  %36169
     r = cell(setsize,1);
     pid = r;
-    r = cell(1,1); %Temp for SG2105 not saving stats
-    mnGrey = NaN(setsize,2);
+    %r = cell(1,1); %Temp for SG2105 not saving stats
+    mnGrey = NaN(setsize,3);
     for count = 1:setsize  %36169
         if lastonesofar < cmax
             %f = [p b '_' num2str(count) '.tiff'];
@@ -77,7 +82,7 @@ for setnum = 1:ceil(cmax/setsize)
             PCR(PCR>1) = 1;
             PFF = PCR*255;
             mnGrey(count,2) = mean(PFF(:));
-            
+            mnGrey(count,3) =  mean(PM(:));
             %Edges = edge(PFF,'canny',[.2 .6],1.5); %.2 .6
             %Edges = edge(PFF,'canny',[.1 .3],1.5); %used for 12March2020
             Edges = edge(PFF,'canny',[.2 .4],1.5); %used for 13March2020
@@ -95,14 +100,14 @@ for setnum = 1:ceil(cmax/setsize)
             lg_area1 = 2000;
             lg_area2 = 400;
             RFP2 = bwareaopen(RFP,100,8);
-            %r{count} = regionprops(RFP2, 'area', 'boundingbox', 'MajorAxis', 'MinorAxis', 'Eccentricity', 'MaxFeretProperties', 'MinFeretProperties', 'Perimeter');
-            r{1} = regionprops(RFP2, 'area', 'boundingbox');
+            r{count} = regionprops(RFP2, 'area', 'boundingbox', 'MajorAxis', 'MinorAxis', 'Eccentricity', 'MaxFeretProperties', 'MinFeretProperties', 'Perimeter');
+            %r{1} = regionprops(RFP2, 'area', 'boundingbox');
             if 1 %output roi images
-                %ind = find([r{count}.Area] >= lg_area1);
-                ind = find([r{1}.Area] >= lg_area1);
+                ind = find([r{count}.Area] >= lg_area1);
+                %ind = find([r{1}.Area] >= lg_area1);
                 for ii = 1:length(ind)
-                    %bb = r{count}(ind(ii)).BoundingBox;
-                    bb = r{1}(ind(ii)).BoundingBox;
+                    bb = r{count}(ind(ii)).BoundingBox;
+                    %bb = r{1}(ind(ii)).BoundingBox;
                     bb(1:2) = bb(1:2) - 20;
                     bb(3:4) = bb(3:4) + 20*2;
                     bb(bb<0) = 0;
@@ -110,9 +115,9 @@ for setnum = 1:ceil(cmax/setsize)
                     img = imcrop(P, bb);
                     [~,fout] = fileparts(pid_stack{w+1});
                     fout = [fout '_' num2str(floor(bb(1))) '_' num2str(floor(bb(2)))];
-                    %r{count}(ind(ii)).pid = fout;
-                    gstat = [numel(find(img==255)) numel(img) prctile(double(img(:)),5) mean(PM(:))]; %add avg gray for whole image
-                    %r{count}(ind(ii)).gstat = gstat;
+                    r{count}(ind(ii)).pid = fout;
+                    gstat = [numel(find(img==255)) numel(img) prctile(double(img(:)),5)]; 
+                    r{count}(ind(ii)).gstat = gstat;
                     if 1 %write images
                         %if gstat(:,1)./gstat(:,2) > .03 & gstat(:,3)>150
                         %    %imwrite(uint8(img), [outdir '\artifact\' fout '.png'])
@@ -173,8 +178,10 @@ for setnum = 1:ceil(cmax/setsize)
             pid_stack(1:end-1) = pid_stack(2:end);
             %pid_stack{end} = [p b '_' num2str(count+w+1) '.tiff'];
             lastonesofar = c+count+w+setsize*(setnum-1);
-            %pid_stack{end} = [p b '_' num2str(lastonesofar) '.tiff'];     
-            pid_stack{end} = [p b '_' num2str(lastonesofar,'%04.0f') '.tiff'];
+            %old basler
+            pid_stack{end} = [p b '_' num2str(lastonesofar) '.tiff'];     
+            %new basler?
+            %pid_stack{end} = [p b '_' num2str(lastonesofar,'%04.0f') '.tiff'];
             disp(['new image end of stack: ' pid_stack{end}])
             try
                 a(:,:,end) = imread(pid_stack{end});
@@ -182,6 +189,11 @@ for setnum = 1:ceil(cmax/setsize)
                 if (strcmp(ME.identifier,'imageio:tiffmexutils:libtiffError'))
                     disp(['Bad tiff file: ', 'pid'])
                     a(:,:,end) = squeeze(mean(a(:,:,1:end-1),3)); %fill with mean in case of bad image file
+                else
+                    if (strcmp(ME.identifier,'MATLAB:imagesci:imread:fileDoesNotExist'))
+                        disp('Missing image file')
+                        keyboard
+                    end
                 end
             end
             %if ~rem(count,1000)
@@ -189,7 +201,7 @@ for setnum = 1:ceil(cmax/setsize)
             %end
         end
 end
-%    save([outdir b '_props' num2str(setnum,'%03.0f')], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b', '-v7.3')
+    save([outdir b '_props' num2str(setnum,'%03.0f')], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b', 'gstat', '-v7.3')
 end
 
 %save([outdir b '_props'], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b', '-v7.3')
