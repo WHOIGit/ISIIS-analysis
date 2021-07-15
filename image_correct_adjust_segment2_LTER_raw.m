@@ -6,7 +6,7 @@
     %outdir = ['\\sosiknas1\Stingray_data\EN644_ROI\' tdir '\'];
     %p = ['\\sosiknas1\Stingray_data\EN644\' tdir '\'];
     
-    tdir = 'EN657_14Oct2020_002';
+    tdir = 'EN657_14Oct2020_011';
     p = ['E:\NESLTER_EN657\' tdir  '\'];
     outdir = ['d:\NESLTER_EN657_ROI\' tdir '\'];
     
@@ -35,7 +35,9 @@ b = b(1:49);
 %pid = r;
 %mnGrey = NaN(setsize,2);
 c = 51;
-%c = 10000;
+%c = 940; 
+%c = 2000; %'EN657_14Oct2020_003';
+%c = 7500; %'EN657_13Oct2020_006;
 % end
 w = 50;
 g = 2.2;
@@ -204,4 +206,5 @@ end
     save([outdir b '_props' num2str(setnum,'%03.0f')], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b', 'gstat', '-v7.3')
 end
 
-%save([outdir b '_props'], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b', '-v7.3')
+%save([outdir b '_props'], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b',
+%'-v7.3')dd
