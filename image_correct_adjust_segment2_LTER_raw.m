@@ -6,8 +6,8 @@
     %outdir = ['\\sosiknas1\Stingray_data\EN644_ROI\' tdir '\'];
     %p = ['\\sosiknas1\Stingray_data\EN644\' tdir '\'];
     
-    tdir = 'EN657_14Oct2020_011';
-    p = ['E:\NESLTER_EN657\' tdir  '\'];
+    tdir = 'EN657_16Oct2020_004';
+    p = ['g:\NESLTER_EN657\' tdir  '\'];
     outdir = ['d:\NESLTER_EN657_ROI\' tdir '\'];
     
 
@@ -203,7 +203,7 @@ for setnum = 1:ceil(cmax/setsize)
             %end
         end
 end
-    save([outdir b '_props' num2str(setnum,'%03.0f')], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b', 'gstat', '-v7.3')
+%    save([outdir b '_props' num2str(setnum,'%03.0f')], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b', 'gstat', '-v7.3')
 end
 
 %save([outdir b '_props'], 'r', 'pid', 'mnGrey', 'tdir', 'count', 'b',
