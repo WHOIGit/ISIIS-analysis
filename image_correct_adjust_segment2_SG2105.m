@@ -2,9 +2,9 @@
 %b = 'Basler_avA2300-25gm__22955661__20200202_183926409';
 %outdir = '\\sosiknas1\Stingray_data\EN649\ROIs\EN649_02Feb2020_028\';
 
-    tdir = 'OTZ_SG2105_14May2021_001';
+    tdir = 'OTZ_SG2105_18May2021_034';
     outdir = ['D:\OTZ_SG2105\ROIs_test\' tdir '\'];
-    p = ['g:\OTZ_SG2105\' tdir '\'];
+    p = ['I:\OTZ_SG2105\' tdir '\'];
     
 if ~exist(outdir, 'dir')
     mkdir(outdir)
@@ -30,7 +30,7 @@ b = b(1:49);
 %pid = r;
 %mnGrey = NaN(setsize,2);
 c = 51;
-c = 21051;
+%c = 21051;
 % end
 w = 50;
 g = 2.2;
@@ -109,7 +109,7 @@ for setnum = 1:ceil(cmax/setsize)
                     %r{count}(ind(ii)).pid = fout;
                     gstat = [numel(find(img==255)) numel(img) prctile(double(img(:)),5)];
                     %r{count}(ind(ii)).gstat = gstat;
-                    if 1 %write images
+                    if 1
                         if gstat(:,1)./gstat(:,2) > .03 & gstat(:,3)>150
                             %imwrite(uint8(img), [outdir '\artifact\' fout '.png'])
                         else
@@ -117,23 +117,25 @@ for setnum = 1:ceil(cmax/setsize)
                         end
                     end
                 end
-                %       ind = find([r{count}.Area] < lg_area1 & [r{count}.Area] >= lg_area2);
-                %       for ii = 1:length(ind)
-                %           bb = r{count}(ind(ii)).BoundingBox;
-                %           bb(1:2) = bb(1:2) - 20;
-                %           bb(3:4) = bb(3:4) + 20*2;
-                %           bb(bb<0) = 0;
-                %           img = imcrop(PFF, bb);
-                %           [~,fout] = fileparts(pid_stack{w+1});
-                %           fout = [fout '_' num2str(floor(bb(1))) '_' num2str(floor(bb(2)))];
+                  %     ind = find([r{count}.Area] < lg_area1 & [r{count}.Area] >= lg_area2);
+                       ind = find([r{1}.Area] < lg_area1 & [r{1}.Area] >= lg_area2); %case for not saving props
+                       for ii = 1:length(ind)
+                           %bb = r{count}(ind(ii)).BoundingBox;
+                           bb = r{1}(ind(ii)).BoundingBox;
+                           bb(1:2) = bb(1:2) - 20;
+                           bb(3:4) = bb(3:4) + 20*2;
+                           bb(bb<0) = 0;
+                           img = imcrop(PFF, bb);
+                           [~,fout] = fileparts(pid_stack{w+1});
+                           fout = [fout '_' num2str(floor(bb(1))) '_' num2str(floor(bb(2)))];
                 %           r{count}(ind(ii)).pid = fout;
                 %           gstat = [numel(find(img==255)) numel(img) prctile(double(img(:)),5)];
                 %           %if gstat(:,1)./gstat(:,2) > .03 & gstat(:,3)>150
-                %           imwrite(uint8(img), [outdir '\small\' fout '.png'])
+                           imwrite(uint8(img), [outdir '\small\' fout '.png'])
                 %           %else
                 %           %  imwrite(uint8(img), [outdir fout '.png'])
                 %           %end
-                %       end
+                       end
             end
             
             if 0
