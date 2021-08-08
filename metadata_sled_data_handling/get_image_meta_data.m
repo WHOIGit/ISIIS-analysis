@@ -2,17 +2,17 @@
 % ISIIS-analysis code set (initial commite of earlier script)
 % 
 
-%p = 'C:\Users\ISIIS WHOI\gss_logs\';
-p = 'C:\work\OTZ\Cruises\Sarmiento2021\sled_data\';
-%load([p 'NESLTER_EN649_sled_data'])
+p = 'C:\Users\ISIIS WHOI\gss_logs\';
+%p = 'C:\work\OTZ\Cruises\Sarmiento2021\sled_data\';
+load([p 'NESLTER_EN668_sled_data'])
 
-cstr = 'OTZ_SG2105';
+cstr = 'NESLTER_EN668';
 load([p cstr '_sled_data'])
-indir = ['f:' filesep cstr filesep];
-%pathlist = dir([indir 'NESLTER*']);
-pathlist = dir([indir 'OTZ_SG2105_0*']);
+indir = ['h:' filesep cstr filesep];
+pathlist = dir([indir 'NESLTER*']);
+%pathlist = dir([indir 'OTZ_SG2105_0*']);
 pathlist = {pathlist.name}';
-outdir = ['C:\work\Stingray_summary\' cstr filesep];
+outdir = ['d:\Stingray_summary\' cstr filesep];
 
 %hz = 13.6739; %image frame rate
 if sled_table.matdate(1) > datenum(2020,7,25)
@@ -21,7 +21,9 @@ else
     hz = 13.673905; %image frame rate from Basler
 end
 %for count = 27:length(pathlist)
-for count = 1:16%length(pathlist)
+
+%%
+for count = 1:length(pathlist)
     disp(pathlist(count))
     clear metaTable
     metaTable = table;
