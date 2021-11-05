@@ -8,6 +8,7 @@ cstr = 'NESLTER_EN668';
 load([p cstr '_sled_data.mat'])
 sled_table_all = sled_table;
 %addStnLabels = @myaddStnLabels;
+bath = readtable('NESLTER_transect_bathymetry.csv');
 
 %% EN668
 towstr = 'Tow 1-7'; latlim = [39.75 41.2]; sled_table = sled_table_all; sled_table(sled_table_all.matdate > datenum('7-19-2021 23:00:00'),:) = [];
@@ -39,12 +40,16 @@ caxis(Trange), colorbar
 text(41.15, zmax*.8, 'Temperature (\circC)')
 titleHandle = title(titlestr);
 addStnLabels(labelDepth)
+hold on
+plot(bath.latitude, bath.bottom_depth_meters, linewidth', 2, 'color', [.5 .5 .5])
 
 subplot(3,1,2)
 scatter(sled_table.TS_LATITUDE_DEG,sled_table.DEPTH_M,symbol_size, sled_table.CTD_SALINITY)
 set(gca, 'ydir', 'rev', 'xdir', 'rev'), axis([latlim 0 zmax])
 caxis(Srange), colorbar; text(41.15, zmax*.8, 'Salinity')
 addStnLabels(labelDepth)
+hold on
+plot(bath.latitude, bath.bottom_depth_meters, linewidth', 2, 'color', [.5 .5 .5])
 
 subplot(3,1,3)
 rho = density(sled_table.CTD_SALINITY, sled_table.CTD_TEMPERATURE_DEG_C, sled_table.CTD_PRESSURE/10);
@@ -52,6 +57,8 @@ scatter(sled_table.TS_LATITUDE_DEG,sled_table.DEPTH_M,symbol_size, rho-1000)
 set(gca, 'ydir', 'rev', 'xdir', 'rev'), axis([latlim 0 zmax])
 caxis(Drange), colorbar; text(41.15, zmax*.8,'Density (kg m^{-3})')
 addStnLabels(labelDepth)
+hold on
+plot(bath.latitude, bath.bottom_depth_meters, linewidth', 2, 'color', [.5 .5 .5])
 
 %print('C:\work\Stingray_summary\NESLTER_EN661\Stingray_TSD', '-dpng')
 print(['C:\work\Stingray_summary\' cstr '\Stingray_TSD_' towstr], '-dpng')
@@ -67,12 +74,16 @@ caxis(Chlrange), colorbar
 text(41.15, zmax*.8, 'Chl from fluor (mg m^{-3})')
 titleHandle = title(titlestr);
 addStnLabels(labelDepth)
+hold on
+plot(bath.latitude, bath.bottom_depth_meters, linewidth', 2, 'color', [.5 .5 .5])
 
 subplot(3,1,2)
 scatter(sled_table.TS_LATITUDE_DEG, sled_table.DEPTH_M,symbol_size, 1.684e-6*(sled_table.FLUOROMETER_BACKSCATTER_RAW-48)), 
 set(gca, 'ydir', 'rev', 'xdir', 'rev'), axis([latlim 0 zmax])
 caxis(bbrange), colorbar; text(41.15, zmax*.8, 'Backscattering (m^{-1} sr^{-1})')
 addStnLabels(labelDepth)
+hold on
+plot(bath.latitude, bath.bottom_depth_meters, linewidth', 2, 'color', [.5 .5 .5])
 
 subplot(3,1,3)
 %scatter(sled_table.TS_LATITUDE_DEG, sled_table.DEPTH_M,20, sled_table.AANDERAA_O2_UM), colorbar, set(gca, 'xdir', 'rev')
@@ -82,7 +93,8 @@ set(gca, 'ydir', 'rev', 'xdir', 'rev'), axis([latlim 0 zmax])
 %caxis([190 390]), colorbar; text(41.15, zmax*.8, 'Oxygen (\muM)')
 caxis(O2satrange), colorbar; text(41.15, zmax*.8, 'Oxygen saturation (%)')
 addStnLabels(labelDepth)
-
+hold on 
+plot(bath.latitude, bath.bottom_depth_meters, linewidth', 2, 'color', [.5 .5 .5])
 print(['C:\work\Stingray_summary\' cstr '\Stingray_FBO_' towstr], '-dpng')
 
 
