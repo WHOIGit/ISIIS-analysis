@@ -1,13 +1,13 @@
 %tdir = 'EN657_13Oct2020_001';
-indirbase = 'G:\NESLTER_EN657\';
-outdirbase = 'D:\NESLTER_EN657_ROI_adj\';
+indirbase = 'i:\NESLTER_EN661\';
+outdirbase = 'D:\NESLTER_EN661_ROI_adj\';
 outdirfea = [outdirbase 'features' filesep];
 if ~exist(outdirfea)
     mkdir(outdirfea)
 end
-dirlist = dir([indirbase 'EN657_16Oct*']);
-parpool(2)
-parfor count = 5:6 %:length(dirlist)
+dirlist = [dir([indirbase 'EN661_05Feb*'])];% dir([indirbase 'EN661_06Feb*'])];
+parpool %(3)
+parfor count = 2:length(dirlist)
     tdir = dirlist(count).name;
     indir = [indirbase tdir filesep];
     
@@ -53,7 +53,7 @@ for counts = 1:w*2+1, a(:,:,counts) = imread([pid_stack{counts}]); end
 
 disp(pid_stack(end))
 %%
-for count = (w*2+2):150%cmax
+for count = (w*2+2):cmax
     pid = pid_stack{w+1};
     P = double(squeeze(a(:,:,w+1)));
     PM = squeeze(mean(a(:,:,[1:w-1,w+1:end]),3));

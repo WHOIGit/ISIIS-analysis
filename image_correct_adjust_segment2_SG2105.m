@@ -2,7 +2,7 @@
 %b = 'Basler_avA2300-25gm__22955661__20200202_183926409';
 %outdir = '\\sosiknas1\Stingray_data\EN649\ROIs\EN649_02Feb2020_028\';
 
-    tdir = 'OTZ_SG2105_19May2021_001';
+    tdir = 'OTZ_SG2105_19May2021_008';
     outdir = ['D:\OTZ_SG2105\ROIs_test\' tdir '\'];
     p = ['I:\OTZ_SG2105\' tdir '\'];
     
