@@ -6,7 +6,7 @@
     %outdir = ['\\sosiknas1\Stingray_data\EN644_ROI\' tdir '\'];
     %p = ['\\sosiknas1\Stingray_data\EN644\' tdir '\'];
     
-    tdir = 'EN657_16Oct2020_004';
+    tdir = 'EN657_14Oct2020_007';
     p = ['g:\NESLTER_EN657\' tdir  '\'];
     outdir = ['d:\NESLTER_EN657_ROI\' tdir '\'];
     
@@ -35,7 +35,7 @@ b = b(1:49);
 %pid = r;
 %mnGrey = NaN(setsize,2);
 c = 51;
-%c = 940; 
+%c = 5100; 
 %c = 2000; %'EN657_14Oct2020_003';
 %c = 7500; %'EN657_13Oct2020_006;
 % end
