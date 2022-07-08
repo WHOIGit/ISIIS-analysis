@@ -3,17 +3,28 @@
 % 
 
 %p = 'C:\Users\ISIIS WHOI\gss_logs\';
-p = 'C:\work\OTZ\Cruises\Sarmiento2021\sled_data\';
-%load([p 'NESLTER_EN649_sled_data'])
+%p = 'C:\work\OTZ\Cruises\Sarmiento2021\sled_data\';
+%%load([p 'NESLTER_EN649_sled_data'])
+%cstr = 'OTZ_SG2105';
+%load([p cstr '_sled_data'])
 
-cstr = 'OTZ_SG2105';
-load([p cstr '_sled_data'])
-indir = ['f:' filesep cstr filesep];
+load('\\vortex\omics\sosik\ISIIS-data\NESLTER_EN657\SledData\NESLTER_EN657_sled_data_fixedGPS.mat')
+%load('\\sosiknas1\Stingray_data\NESLTER_EN644\SledData\NESLTER_EN644_sled_data.mat')
+
+cstr = 'NESLTER_EN657';
+indir = ['\\vortex\omics\sosik\ISIIS-data\' filesep cstr filesep];
+%indir = ['\\sosiknas1\Stingray_data\' filesep cstr filesep];
+
 %pathlist = dir([indir 'NESLTER*']);
-pathlist = dir([indir 'OTZ_SG2105_0*']);
+%pathlist = dir([indir 'OTZ_SG2105_0*']);
+pathlist  = dir([indir 'EN657*']);
 pathlist = {pathlist.name}';
-outdir = ['C:\work\Stingray_summary\' cstr filesep];
+%outdir = ['C:\work\Stingray_summary\' cstr filesep];
+outdir = ['\\sosiknas1\Stingray_data\Image_metadata\' cstr filesep];
 
+if ~exist(outdir, 'dir')
+    mkdir(outdir)
+end
 %hz = 13.6739; %image frame rate
 if sled_table.matdate(1) > datenum(2020,7,25)
     hz = 14.999925; %image frame rate from Basler
@@ -21,7 +32,7 @@ else
     hz = 13.673905; %image frame rate from Basler
 end
 %for count = 27:length(pathlist)
-for count = 1:16%length(pathlist)
+for count = 3:3 %length(pathlist)
     disp(pathlist(count))
     clear metaTable
     metaTable = table;
@@ -47,6 +58,8 @@ for count = 1:16%length(pathlist)
     cmax = length(imgnum);
     deltime = (1/hz:1/hz:cmax/hz)';
     metaTable.frame_matdate = start_datetime+deltime/60/60/24;
+    metaTable.ISO_datetime = datetime(metaTable.frame_matdate, 'ConvertFrom', 'datenum', 'Format', 'uuuu-MM-dd'' ''HH:mm:ss.SSS');
+    metaTable = movevars(metaTable, 'ISO_datetime', 'before', 'frame_matdate');
     %x = start_datetime+deltime/60/60/24-metaTable.file_matdate';
     %plot(x, '.')
     %hold on, line(xlim, xlim, 'color', 'r')
