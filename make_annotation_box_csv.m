@@ -6,21 +6,23 @@ max_width = 2330;
 max_height = 1750;
 max_pixel = [max_width max_height max_width max_height];
    
-for ii = 1:length(Fall) %8, 15
+for ii = 8:length(Fall) %8, 15
     F = regexprep(Fall(ii).name, '.mat', '');
     disp(F)
     load(['\\vortex\share\otz-data\AR43_Stingray\AR43_ROI_adj\features\' F ])
     disp('loading class results')
-    S = jsondecode(fileread(['\\vortex\share\otz-data\AR43_Stingray\run-output\v3\AR43_20220308_0\' F '_img_results.json']));
-    pid = regexprep(S.input_images, '.png', '');
-    temp = split(pid,'_');
-    frame = temp(:,8);
     box_annotation = table;
-    box_annotation.frame = str2num(char(frame))-1; %Tator used 0-based frame counting
-    [~,ib] = ismember(pid,Props.roiID);
-    box_annotation = [box_annotation array2table((Props.BoundingBox(ib,:)-[.5 .5 0 0])./max_pixel, 'VariableNames', {'x', 'y','width', 'height'})];
-    box_annotation.class = S.class_labels(S.output_classes+1);
-    
+    f = ['\\vortex\share\otz-data\AR43_Stingray\run-output\v3\AR43_20220308_0\' F '_img_results.json'];
+    if exist(f, 'file')
+        S = jsondecode(fileread(f));
+        pid = regexprep(S.input_images, '.png', '');
+        temp = split(pid,'_');
+        frame = temp(:,8);
+        box_annotation.frame = str2num(char(frame))-1; %Tator used 0-based frame counting
+        [~,ib] = ismember(pid,Props.roiID);
+        box_annotation = [box_annotation array2table((Props.BoundingBox(ib,:)-[.5 .5 0 0])./max_pixel, 'VariableNames', {'x', 'y','width', 'height'})];
+        box_annotation.class = S.class_labels(S.output_classes+1);
+    end
     %now get the small ones
     disp('loading class results for small ROIs')
     S = jsondecode(fileread(['\\vortex\share\otz-data\AR43_Stingray\run-output\v3\AR43_20220308_0\' F filesep 'small_img_results.json']));
