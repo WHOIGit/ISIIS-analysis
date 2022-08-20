@@ -74,6 +74,8 @@ figure(lim(1)), clf
 %esd2use = find(esd_bins>=llim);
 esd2use = find(esd_bins>=lim(1) & esd_bins<lim(2));
 %scatter(metaTable_all.TS_LONGITUDE_DEG, metaTable_all.DEPTH_M, 40,log10(sum(Nesdall(:,esd2use),2)*liters_per_frame*frame_set), '.')
+
+%%%LOOKS like this is a mistake SHOULD BE DIVIDED BY liters_per_frame RIGHT???
 scatter(metaTable_all.LONadj, metaTable_all.DEPTH_M, 40,log10(sum(Nesdall(:,esd2use),2)*liters_per_frame*frame_set), '.')
 set(gca, 'ydir', 'rev')
 caxis(clim), ch = colorbar; colormap jet
