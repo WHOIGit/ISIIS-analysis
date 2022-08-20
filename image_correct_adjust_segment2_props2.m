@@ -1,13 +1,13 @@
 %tdir = 'EN657_13Oct2020_001';
-indirbase = 'i:\NESLTER_EN661\';
-outdirbase = 'D:\NESLTER_EN661_ROI_adj\';
+indirbase = 'f:\NESLTER_AT46\';
+outdirbase = 'D:\NESLTER_AT46_ROI_adj\';
 outdirfea = [outdirbase 'features' filesep];
 if ~exist(outdirfea)
     mkdir(outdirfea)
 end
-dirlist = [dir([indirbase 'EN661_05Feb*'])];% dir([indirbase 'EN661_06Feb*'])];
+dirlist = [dir([indirbase 'NESLTER_AT46_17Feb*'])];% dir([indirbase 'EN661_06Feb*'])];
 parpool %(3)
-parfor count = 2:length(dirlist)
+parfor count = 1:length(dirlist)
     tdir = dirlist(count).name;
     indir = [indirbase tdir filesep];
     

@@ -1,6 +1,6 @@
 
 p = 'C:\Users\ISIIS WHOI\gss_logs\';
-cstr = 'OTZ_AR43';
+cstr = 'NESLTER_EN687';
 load([p cstr '_sled_data'])
 
 figure
