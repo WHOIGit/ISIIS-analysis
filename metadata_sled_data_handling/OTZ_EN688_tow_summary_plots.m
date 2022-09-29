@@ -54,4 +54,22 @@ for c = 1:11
     grid on
 end
 ylabel(t, 'Latitude'), xlabel(t, 'Longitude')
-legend(n(11), [p1 p2 p3 p4], 'WBAT', 'Start tow', 'End tow', 'tow')
+l = legend(n(11), [p1 p2 p3 p4], 'WBAT', 'Start tow', 'End tow', 'tow');
+l = legend('WBAT', 'Start tow', 'End tow', 'tow');
+l.Layout.Tile  = 'east';
+%legend([p1 p2 p3 p4], 'WBAT', 'Start tow', 'End tow', 'tow')
+
+%%
+tt = sled_table.datetime-4/24; %local time
+figure
+histogram(hour(tt)+minute(tt)/60,0:.5:24, 'Normalization', 'probability')
+ylabel('Proportion of observations')
+xlabel('Local hour of day')
+xlim([0 24])
+
+%%
+figure
+h = histogram(sled_table.DEPTH_M,0:10:1000, 'Normalization', 'probability')
+ylabel('Proportion of observations')
+xlabel('Depth (m)')
+xlim([0 1000])
